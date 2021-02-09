@@ -1,0 +1,26 @@
+O objetivo é criar um aplicativo para controle de contatos.
+
+Os contatos deverão ser salvos em arquivo, de modo que ao iniciar o programa os contatos
+gravados deverão ser carregados para a memória.
+
+O aplicativo deverá oferecer as seguintes opções:
+1. Adicionar
+2. Remover
+3. Pesquisar (apenas pelo nome)
+4. Alterar
+5. Listar todos os contatos
+6. Sair
+
+Um contato tem as seguintes informações:
+- Nome
+- Endereco (completo)
+- Telefone residencial (se tiver) - deve ser cadastrado apenas o número
+- Telefone celular (se tiver) - deve ser cadastrado apenas o número
+- Data de nascimento
+
+A primeira linha do arquivo contendo os contatos terá o número de contatos gravados no arquivo.
+
+Formato do arquivo de contatos
+primeira linha: número de contatos no arquivo
+demais linhas: <nome>;<endereco>;<tel residencial>;<tel celular>;<data nascimento>\n
+

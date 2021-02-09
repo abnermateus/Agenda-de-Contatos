@@ -94,6 +94,7 @@ void listar_contato()
 
     fclose(arq);
 }
+// Aqui termina a função que lista os contatos
 
 // Esta é a função que exibe o menu e recebe do usuário o que ele deseja fazer
 int menu()

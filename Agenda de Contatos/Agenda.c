@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 //Esta é a função para escrevermos coisas no arquivo Contatos.txt
-int escrever_arquivo(int num_caracteres, FILE *arq)
+void escrever_arquivo(int num_caracteres, FILE *arq)
 {
     char caracter;
 
@@ -13,9 +14,7 @@ int escrever_arquivo(int num_caracteres, FILE *arq)
             break;
         fputc(caracter, arq);
     }
-    fprintf(arq, "\n");
-
-    return 0;
+    fprintf(arq, "; ");
 }
 // Aqui termina a função de escrever no arquivo Contatos.txt
 
@@ -50,48 +49,78 @@ int numero_contatos(int add_ou_rmv)
 // Aqui termina a função de atualizar o número de contatos
 
 // Esta é a função para adicionar um novo contato à lista
-int adicionar_contato()
+void adicionar_contato()
 {
     FILE *arq = fopen("Contatos.txt", "a");
     printf("\nADICIONAR CONTATO\n");
 
     printf("Digite o nome:");
-    fputs("\nNome:", arq);
+    fputs("\n\n", arq);
     escrever_arquivo(45, arq);
 
     printf("Digite o endereco:");
-    fputs("Endereco:", arq);
     escrever_arquivo(100, arq);
 
     printf("Digite o telefone residencial:");
-    fputs("Telefone residencial:", arq);
-    escrever_arquivo(25, arq);
+    escrever_arquivo(45, arq);
 
     printf("Digite o telefone celular:");
-    fputs("Telefone celular:", arq);
-    escrever_arquivo(25, arq);
+    escrever_arquivo(45, arq);
 
     printf("Digite a data de nascimento:");
-    fputs("Data de nascimento:", arq);
     escrever_arquivo(15, arq);
-    fputs("===============================================\n", arq);
+    fputs("\n========================================================================================", arq);
 
     fclose(arq);
     numero_contatos(1);
-    return 0;
 }
 // Aqui termina a função de adicionar contatos
+
+// Esta é a função para verificar se já existe um determinado contato
+void pesquisar_contato()
+{
+    char nome[20], verifica[150];
+    FILE *arq = fopen("contatos.txt", "r");
+
+    printf("\nPESQUISAR CONTATO\n");
+    printf("Digite o nome do contato que voce deseja procurar: ");
+    fgets(nome, sizeof(nome), stdin);
+
+    nome[strlen(nome) - 1] = nome[strlen(nome)];
+
+    while (fgets(verifica, sizeof(verifica), arq) != NULL)
+    {
+        if (strstr(verifica, nome) != NULL)
+        {
+            printf("\n%s", verifica);
+            fclose(arq); 
+            return ;
+        } 
+    }
+    printf("\nContato nao encontrado !!!!\n"); 
+    fclose(arq);
+}
+// Aqui termina a função de procurar contatos
 
 // Esta é a função que lista os contatos salvos
 void listar_contato()
 {
     FILE *arq = fopen("contatos.txt", "r");
     char caracter, n_contatos = fgetc(arq);
+   
+    printf("\nLISTAR CONTATOS\n");
+    printf("\n======== Voce possui %c contatos ========\n", n_contatos);
 
-    printf("\n****** Voce possui %c contatos ******", n_contatos);
     while ((caracter = fgetc(arq)) != EOF)
-        printf("%c", caracter);
-
+    {
+        if (caracter == ';')
+        {
+            putchar('\n');
+            continue;
+        }
+        putchar(caracter);
+    }
+    printf("\n");
     fclose(arq);
 }
 // Aqui termina a função que lista os contatos
@@ -127,9 +156,10 @@ int main()
         switch (menu())
         {
         case 1: adicionar_contato(); break;
+        case 3: pesquisar_contato(); break;
         case 5: listar_contato(); break;
-        case 6: return 0; 
-        default: printf("Opcao invalida!\n"); break;
+        case 6: printf("\nSaindo da sua agenda de contatos...\n"); return 0;
+        default: printf("\nOpcao invalida!\n"); break;
         }
     }
     return 0;

@@ -2,14 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-//Esta é a função para escrevermos coisas no arquivo Contatos.txt
+// Esta é a função que verifica se o arquivo existe, e se não existir, cria
+void verifica_arquivo(FILE *arq, char *nome)
+{ 
+    if (arq == NULL)
+    {
+        arq = fopen("Contatos.txt", "a");
+        fprintf(arq, "0\n");
+        fclose(arq);
+    }
+}
+// Aqui termina a função de verificar o arquivo
+
+// Esta é a função para escrevermos coisas no arquivo Contatos.txt
 void escrever_arquivo(int num_caracteres, FILE *arq)
 {
-    char caracter;
-
     for (int i = 0; i < num_caracteres; i++)
     {
-        caracter = getchar();
+       char caracter = getchar();
         if (caracter == '\n')
             break;
         fputc(caracter, arq);
@@ -22,8 +32,9 @@ void escrever_arquivo(int num_caracteres, FILE *arq)
 int numero_contatos(int add_ou_rmv)
 {
     char caracter;
-    FILE *arq = fopen("contatos.txt", "r");
+    FILE *arq = fopen("Contatos.txt", "r");
     FILE *temp = fopen("temp.dat", "w");
+    verifica_arquivo(arq, "Contatos.txt");;
 
     while ((caracter = fgetc(arq)) != EOF)
         fputc(caracter, temp);

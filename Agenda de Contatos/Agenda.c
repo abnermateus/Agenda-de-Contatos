@@ -8,7 +8,7 @@ void verifica_arquivo(FILE *arq, char *nome)
     if (arq == NULL)
     {
         arq = fopen("Contatos.txt", "a");
-        fprintf(arq, "0\n");
+        fprintf(arq, "0");
         fclose(arq);
     }
 }
@@ -34,8 +34,7 @@ int numero_contatos(int add_ou_rmv)
     char caracter;
     FILE *arq = fopen("Contatos.txt", "r");
     FILE *temp = fopen("temp.dat", "w");
-    verifica_arquivo(arq, "Contatos.txt");;
-
+    
     while ((caracter = fgetc(arq)) != EOF)
         fputc(caracter, temp);
 
@@ -87,6 +86,13 @@ void adicionar_contato()
 }
 // Aqui termina a função de adicionar contatos
 
+// Esta é a função para remover um contato da lista
+void remover_contato()
+{
+    return ;
+}
+// Aqui termina a função de remover contatos
+
 // Esta é a função para verificar se já existe um determinado contato
 void pesquisar_contato()
 {
@@ -112,6 +118,13 @@ void pesquisar_contato()
     fclose(arq);
 }
 // Aqui termina a função de procurar contatos
+
+// Esta é a função para alterar um contato
+void alterar_contato()
+{
+    return ;
+}
+// Aqui termina a função de alterar contatos
 
 // Esta é a função que lista os contatos salvos
 void listar_contato()
@@ -162,12 +175,17 @@ int menu()
 // Esta é a função principal, que nos guiará, conforme nossa escolha, à outras funções
 int main()
 {
+    FILE *arq = fopen("Contatos.txt", "r");
+    verifica_arquivo(arq, "Contatos.txt");
+
     while (1)
     {
         switch (menu())
         {
         case 1: adicionar_contato(); break;
+        case 2: remover_contato(); break;
         case 3: pesquisar_contato(); break;
+        case 4: alterar_contato(); break;
         case 5: listar_contato(); break;
         case 6: printf("\nSaindo da sua agenda de contatos...\n"); return 0;
         default: printf("\nOpcao invalida!\n"); break;

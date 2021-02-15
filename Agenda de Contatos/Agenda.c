@@ -4,7 +4,7 @@
 
 // Esta é a função que verifica se o arquivo existe, e se não existir, cria
 void verifica_arquivo(FILE *arq, char *nome_arquivo)
-{ 
+{
     if (arq == NULL)
     {
         arq = fopen("Contatos.txt", "a");
@@ -19,7 +19,7 @@ int numero_contatos(int add_ou_rmv)
 {
     char caracter;
     FILE *arq = fopen("Contatos.txt", "r");
-    FILE *temp = fopen("temp.dat", "w");
+    FILE *temp = fopen("Temp.txt", "w");
     
     while ((caracter = fgetc(arq)) != EOF)
         fputc(caracter, temp);
@@ -27,7 +27,7 @@ int numero_contatos(int add_ou_rmv)
     fclose(arq);
     fclose(temp);
     arq = fopen("contatos.txt", "w");
-    temp = fopen("temp.dat", "r");
+    temp = fopen("Temp.txt", "r");
 
     char num_char = fgetc(temp);
     int num_int = (num_char - '0') + add_ou_rmv;
@@ -39,7 +39,7 @@ int numero_contatos(int add_ou_rmv)
 
     fclose(arq);
     fclose(temp);
-    remove("temp.dat");
+    remove("Temp.txt");
     return num_int;
 }
 // Aqui termina a função de atualizar o número de contatos
@@ -63,16 +63,16 @@ void adicionar_contato()
     FILE *arq = fopen("Contatos.txt", "a");
     printf("\nADICIONAR CONTATO\n");
 
-    printf("Digite o nome:");
+    printf("Digite o nome: ");
     fputs("\n", arq);
     escrever_arquivo(45, arq);
-    printf("Digite o endereco:");
+    printf("Digite o endereco: ");
     escrever_arquivo(100, arq);
-    printf("Digite o telefone residencial:");
+    printf("Digite o telefone residencial: ");
     escrever_arquivo(45, arq);
-    printf("Digite o telefone celular:");
+    printf("Digite o telefone celular: ");
     escrever_arquivo(45, arq);
-    printf("Digite a data de nascimento:");
+    printf("Digite a data de nascimento: ");
     escrever_arquivo(15, arq);
     
     fclose(arq);
@@ -101,14 +101,14 @@ void remover_contato()
             fseek(arq, init, SEEK_SET);
 
             for (int i = 0; i < aux; i++)
-               putc((int) '|', arq);
+               putc((int) '-', arq);
             break;
         }
         init = ftell(arq);
     }
     fclose(arq);
-    arq = fopen("contatos.txt", "r");
-    FILE *temp = fopen("Temp.dat", "w");
+    arq = fopen("Contatos.txt", "r");
+    FILE *temp = fopen("Temp.txt", "w");
 
     char num_char = fgetc(arq), caracter;
     int num_int = (num_char - '0');
@@ -117,21 +117,21 @@ void remover_contato()
 
     while ((caracter = fgetc(arq)) != EOF)
     {
-        if (caracter == '|')
+        if (caracter == '-')
             continue;
         fputc(caracter, temp);
     }
     fclose(arq);
     fclose(temp);
-    arq = fopen("contatos.txt", "w");
-    temp = fopen("temp.dat", "r"); 
+    arq = fopen("Contatos.txt", "w");
+    temp = fopen("Temp.txt", "r"); 
 
     while ((caracter = fgetc(temp)) != EOF)
         fputc(caracter, arq);
 
     fclose(arq);
     fclose(temp);
-    remove("temp.dat");
+    remove("Temp.txt");
     numero_contatos(-1);
 }
 // Aqui termina a função de remover contatos
@@ -140,7 +140,7 @@ void remover_contato()
 void pesquisar_contato()
 {
     char nome[20], verifica[150];
-    FILE *arq = fopen("contatos.txt", "r");
+    FILE *arq = fopen("Contatos.txt", "r");
 
     printf("\nPESQUISAR CONTATO\n");
     printf("Digite o nome do contato que voce deseja procurar: ");
@@ -164,7 +164,69 @@ void pesquisar_contato()
 // Esta é a função para alterar um contato
 void alterar_contato()
 {
-    return ;
+    char nome[100], verifica[1000];
+    FILE *arq = fopen("Contatos.txt", "r+");
+    long int init = 0;
+    init = ftell(arq);
+
+    printf("\nALTERAR CONTATO\n");
+    printf("Digite o nome do contato que voce deseja alterar: ");
+    fgets(nome, sizeof(nome), stdin);
+    nome[strlen(nome) - 1] = nome[strlen(nome)];
+
+    while (fscanf(arq, "%s%*c", verifica) != EOF)
+    {
+        if (strstr(verifica, nome) != NULL)
+        {
+            int aux = strlen(verifica);
+            fseek(arq, init, SEEK_SET);
+
+            for (int i = 0; i < aux; i++)
+                putc((int) '-', arq);
+
+            fseek(arq, init, SEEK_SET);
+
+            printf("Digite o nome: ");
+            fputs("\n", arq);
+            escrever_arquivo(45, arq);
+            printf("Digite o endereco: ");
+            escrever_arquivo(100, arq);
+            printf("Digite o telefone residencial: ");
+            escrever_arquivo(45, arq);
+            printf("Digite o telefone celular: ");
+            escrever_arquivo(45, arq);
+            printf("Digite a data de nascimento: ");
+            escrever_arquivo(15, arq);
+            break;
+        }
+        init = ftell(arq);
+    }
+    fclose(arq);
+    arq = fopen("Contatos.txt", "r");
+    FILE *temp = fopen("Temp.txt", "w");
+
+    char num_char = fgetc(arq), caracter;
+    int num_int = (num_char - '0');
+    num_char = num_int + '0';
+    fputc(num_char, temp);
+
+    while ((caracter = fgetc(arq)) != EOF)
+    {
+         if (caracter == '-')
+            continue;
+        fputc(caracter, temp);
+    }
+    fclose(arq);
+    fclose(temp);
+    arq = fopen("contatos.txt", "w");
+    temp = fopen("Temp.txt", "r");
+
+    while ((caracter = fgetc(temp)) != EOF)
+        fputc(caracter, arq);
+
+    fclose(arq);
+    fclose(temp);
+    remove("Temp.txt");
 }
 // Aqui termina a função de alterar contatos
 
